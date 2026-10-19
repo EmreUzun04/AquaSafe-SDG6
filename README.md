@@ -1,64 +1,30 @@
-💧 AquaSafe: AI-Driven Water Potability Prediction
+# AquaSafe: AI-Driven Water Potability Prediction 💧
 
-👥 Team Members
+**Team Members:** İsmail Emre Uzun, Erkan Uslu, Enver Meriç Erdoğuş, Kaan Akbaş  
+**Course Project:** AI for the SDGs Capstone Project  
 
-İsmail Emre Uzun
+## 🌍 Overview & Target Audience
+This project aims to predict whether water is safe for human consumption based on its chemical properties using machine learning classification. 
+* **Target User:** Local municipalities, water treatment facilities, and rural communities.
+* **Mission:** AquaSafe helps local authorities and communities instantly determine if a water source is drinkable by analyzing its chemical metrics, ensuring faster access to safe drinking water compared to traditional, slow testing methods.
 
-Erkan Uslu
+## 🎯 Sustainable Development Goal (SDG) Link
+This project directly contributes to **SDG 6: Clean Water and Sanitation**, specifically **Target 6.1**: *Achieve universal and equitable access to safe and affordable drinking water for all.* By utilizing AI, we aim to accelerate preliminary water safety assessments, reducing global health risks associated with contaminated water.
 
-Enver Meriç Erdoğuş
+## 📊 Dataset & Current Progress (Assignment 1)
+We are utilizing the publicly available **"Water Quality"** dataset from Kaggle. The dataset contains 3,276 observations and 10 variables, including the target variable `Potability` (0 = Not Safe, 1 = Safe) and 9 chemical/physical properties (pH, Hardness, Solids, Chloramines, Sulfate, Conductivity, Organic Carbon, Trihalomethanes, Turbidity).
 
-Kaan Akbaş
+**Exploratory Data Analysis (EDA) Completed:**
+* **Missing Value Handling:** Applied mean imputation grouped by the `Potability` class for `ph`, `Sulfate`, and `Trihalomethanes` columns to prevent data loss.
+* **Class Distribution Check:** Identified a distribution of 60.99% "Not Safe" and 39.01% "Safe".
+* **Visualizations:** Created correlation heatmaps and distribution plots to identify feature impacts and outliers.
 
-🌍 1. Project Overview & Problem Statement
+## 🤖 Planned Model Selection (Upcoming Phase)
+*Note: The project is currently in the EDA phase. The following models have been selected for implementation in the upcoming assignments.*
 
-Contaminated water is a major public health risk globally. Traditional water testing methods can be slow, resource-intensive, and inaccessible for rural communities or local municipalities with limited budgets.
-
-AquaSafe aims to solve this problem by providing an instant, AI-driven preliminary assessment of water safety. By analyzing the chemical and physical properties of a water sample, our machine learning model predicts whether the water is safe for human consumption (Potability).
-
-🎯 2. Sustainable Development Goal (SDG) Link
-
-This project directly contributes to the United Nations Sustainable Development Goal 6: Clean Water and Sanitation.
-
-Target 6.1: By 2030, achieve universal and equitable access to safe and affordable drinking water for all.
-
-Our Contribution: Accelerating and simplifying water safety assessments using AI, making testing more accessible to communities worldwide.
-
-📊 3. Dataset & Exploratory Data Analysis (EDA)
-
-We utilized the publicly available "Water Quality" dataset from Kaggle, which contains 3,276 observations and 10 variables.
-
-Target Variable: Potability (0 = Not Safe, 1 = Safe)
-
-Features: pH, Hardness, Solids, Chloramines, Sulfate, Conductivity, Organic Carbon, Trihalomethanes, Turbidity.
-
-EDA & Data Cleaning Highlights:
-
-Missing Value Imputation: Missing values in ph (491), Sulfate (781), and Trihalomethanes (162) were imputed using the mean value of their respective Potability class to preserve statistical profiles.
-
-Class Distribution: The dataset has a slight class imbalance (60.99% Not Safe vs. 39.01% Safe).
-
-Visualizations: Correlation heatmaps and distribution histograms were generated to identify outliers and understand the relationships between chemical features.
-
-🤖 4. Model Selection & Architecture
-
-We implemented and compared multiple machine learning algorithms, focusing on:
-
-XGBoost Classifier: Selected for its exceptional handling of tabular data, non-linear relationships, and robustness to outliers in chemical measurements.
-
-Random Forest Classifier: Used as a strong baseline tree-based model.
-
-System Flow:
-
-Input: Chemical water metrics are entered into the system.
-
-Processing: The XGBoost model evaluates the features against learned patterns.
-
-Output: A binary prediction (Safe / Not Safe) alongside a confidence probability score.
-
-⚙️ 5. How to Run the Project
-
-Prerequisites
-
-Make sure you have Python installed. You will also need the following libraries:
-pandas, plotly
+* **Proposed Primary Model:** XGBoost Classifier. We plan to use XGBoost because it handles tabular data with non-linear relationships exceptionally well and is robust to outliers in chemical measurements.
+* **Proposed Baseline Model:** Random Forest. We will compare our primary model against a Random Forest baseline to evaluate performance improvements.
+* **Planned Pipeline:** 
+  1. Input: Chemical water metrics.
+  2. Processing: XGBoost model evaluation.
+  3. Output: Binary prediction (Safe / Not Safe) with a confidence probability score.

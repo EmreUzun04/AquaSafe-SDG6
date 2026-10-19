@@ -1,7 +1,6 @@
 # AquaSafe: AI-Driven Water Potability Prediction 💧
 
-**Team Members:** İsmail Emre Uzun, Erkan Uslu, Enver Meriç Erdoğuş, Kaan Akbaş  
-**Course Project:** AI for the SDGs Capstone Project  
+**Team Members:** İsmail Emre Uzun, Erkan Uslu, Enver Meriç Erdoğuş, Kaan Akbaş    
 
 ## 🌍 Overview & Target Audience
 This project aims to predict whether water is safe for human consumption based on its chemical properties using machine learning classification. 
@@ -19,7 +18,7 @@ We are utilizing the publicly available **"Water Quality"** dataset from Kaggle.
 * **Class Distribution Check:** Identified a distribution of 60.99% "Not Safe" and 39.01% "Safe".
 * **Visualizations:** Created correlation heatmaps and distribution plots to identify feature impacts and outliers.
 
-## 🤖 Planned Model Selection (Upcoming Phase)
+## 🤖 Planned Model Selection 
 *Note: The project is currently in the EDA phase. The following models have been selected for implementation in the upcoming assignments.*
 
 * **Proposed Primary Model:** XGBoost Classifier. We plan to use XGBoost because it handles tabular data with non-linear relationships exceptionally well and is robust to outliers in chemical measurements.

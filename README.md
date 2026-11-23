@@ -1,45 +1,39 @@
-# Post-Earthquake Tent City Rapid Water Potability Triage System (SDG 6)
+# AquaSafe
 
-## Overview
-Following major seismic disasters, municipal water pipelines and sewage networks suffer structural fractures, causing cross-contamination of groundwater and surface water supplies. In emergency tent cities, access to accredited microbiology and analytical chemistry laboratories (required to measure *Escherichia coli*, Nitrate $\text{NO}_3^-$, and dissolved heavy metals like Arsenic and Lead) is severely disrupted or delayed by 24–72 hours.
+AquaSafe studies whether three water measurements and preceding weather can help prioritize laboratory testing for E. coli at untreated drinking-water intakes. The study covers Alpes-Maritimes, France, from 2020 through 2025 and supports SDG 6.1.
 
-This project develops an end-to-end **Rapid Water Potability Triage System** powered by low-cost, real-time electrochemical and optical field sensors (**pH**, **Turbidity**, **Electrical Conductivity**, **Dissolved Oxygen**, **Water Temperature**) integrated with station-level **Meteorological Records** (**72-Hour Cumulative Precipitation** and **Ambient Temperature**) derived from the **Water Quality Portal (WQP)** and **Open-Meteo / NOAA** historical station archives.
+## Files
 
----
+| File | Contents |
+| --- | --- |
+| AquaSafe.ipynb | Executed notebook with data preparation, weather matching, exploratory analysis, model evaluation and interpretation. |
+| data/sise_eaux_capture_observations.csv | Original French Ministry of Health SISE-Eaux measurements and sampling metadata for the study scope. Measurement identifiers and official archive URLs are included. |
+| surname1_surname2_assignment2.pdf | One-page model results report. |
 
-## Key Features & Methodological Highlights
-1. **Spatio-Temporal Hydro-Meteorological Dataset (`wqp_disaster_water_quality.csv`):**
-   - Contains $N = 5,000$ geo-referenced, time-stamped water quality and weather station observations across five seismic-prone hydrological basins (`Hatay_Asi_Basin`, `Kahramanmaras_Ceyhan_Basin`, `Adiyaman_Goksu_Basin`, `Malatya_Euphrates_Basin`, `Marmara_Fault_Zone`).
-   - Captures post-rainfall surface runoff and sewage intrusion dynamics that drive microbial (*E. coli*) and chemical (Nitrate, Heavy Metal) contamination.
-2. **Zero Data Leakage & Class-Agnostic Imputation:**
-   - Missing sensor readings ($3.7\% - 6.8\%$ across field channels) are imputed strictly after train-test splitting using a distance-weighted `KNNImputer(n_neighbors=5)` fitted **exclusively on the training input features ($X_{\text{train}}$)** without accessing the target variable ($y$).
-3. **Regulatory Benchmarking (WHO & TS 266 vs. Machine Learning):**
-   - Benchmarks non-linear ensemble models (**Random Forest** and **Gradient Boosting**) directly against the official **World Health Organization (WHO)** and **Turkish Standards Institution (TS 266)** physical sensor cutoff rules ($6.5 \le \text{pH} \le 8.5$, $\text{Turbidity} \le 5.0\text{ NTU}$, $\text{Conductivity} \le 2500\text{ }\mu\text{S/cm}$, $\text{DO} \ge 5.0\text{ mg/L}$).
-   - Demonstrates that $16.6\%$ of all field samples suffer from **Hidden Laboratory Contamination** (passing physical sensor thresholds while failing laboratory *E. coli*, Nitrate, or Heavy Metal limits).
+## Run the notebook
 
----
+Open a terminal in the extracted project directory. Use Python 3.11 or later.
 
-## Holdout Test Set Performance ($N = 1,000$)
-
-| Model / Method | Accuracy (%) | Macro F1-Score | Unsafe Water Recall (%) | Safe Precision (%) | False Safe Cases (Critical Risk) | ROC-AUC |
-| :--- | :---: | :---: | :---: | :---: | :---: | :---: |
-| **WHO & TS 266 Simple Cutoff Rule** | 84.20 | 0.8137 | 58.85 | 79.59 | 158 | 0.7943 |
-| **Random Forest (Sensors + Weather)** | 95.70 | 0.9545 | 94.01 | 96.28 | 23 | 0.9843 |
-| **Gradient Boosting (Sensors + Weather)** | **96.50** | **0.9630** | **95.57** | **97.24** | **17** | **0.9869** |
-
-* **Key Takeaway:** The **Gradient Boosting** model increases contaminated water detection (**Unsafe Recall**) from **$58.85\%$ to $95.57\%$**, reducing life-threatening **False Safe** classifications by **$89.2\%$** ($158 \rightarrow 17$ cases) compared to relying solely on single-parameter WHO/TS 266 sensor cutoffs.
-
----
-
-## Repository Structure
-* `post_earthquake_water_triage.ipynb` — Fully executed Jupyter Notebook containing data exploration, regulatory failure analysis, class-agnostic imputation, model benchmarking, and the interactive 3-tier field triage prototype.
-* `wqp_disaster_water_quality.csv` — Merged WQP field sensor and meteorological station dataset ($5,000$ records, $16$ attributes).
-* `README.md` — Project documentation, methodology, and benchmark summary.
-
----
-
-## Quick Start & Reproduction
 ```bash
-pip install numpy pandas scikit-learn matplotlib seaborn jupyter
-jupyter notebook post_earthquake_water_triage.ipynb
+python -m pip install jupyterlab pandas==2.2.3 scikit-learn==1.8.0 matplotlib
+python -m jupyterlab
 ```
+
+Open **AquaSafe.ipynb** and run all cells. On first run, the notebook downloads official API Géo and Météo-France files over HTTPS. The downloaded files are cached in `.weather_cache/`. The notebook writes the aligned cohort to `outputs/water_weather.csv` and generates the descriptive tables, missingness audit, predictions, split and figures.
+
+To extend the dataset, join the official **CAP_RES** and **CAP_PLV** extracts by `referenceprel` and place the resulting CSV with the same headers in `data/`. Preserve the original sample references, units, qualifiers, quality fields and municipality codes. The variables `START_YEAR` and `END_YEAR` set the time window. New eligible samples are matched to weather and included when the grouped split is computed.
+
+## Data and evaluation
+
+- The cohort has **989 samples**, including **497 E. coli detections** and **492 non-detects**. All three sensor variables are complete. pH is generally a field reading. Most conductivity and all turbidity measurements are laboratory readings. Turbidity is reported in NFU and conductivity in µS/cm at 25 °C. Source water is untreated groundwater or surface water intended for supply. The complete-case filter and laboratory rules are recorded in the notebook.
+- WHO Table 7.10 specifies no detectable E. coli in 100 mL. TS 266 April 2005 Table 1 specifies 0 per 100 mL for Class 2 Type 2. The pH indicator uses the strict 6.5–9.5 interval in TS 266 Table 3. Reported turbidity and conductivity remain in their original NFU and 25 °C measurement definitions.
+- Capture coordinates are withheld in the source archive. Official municipality reference centers provide the location approximation for Météo-France matching. All 989 complete events have eligible weather. Weather station IDs, source URLs, quality flags and aligned values are retained in the generated output.
+- The test holds out 197 samples from 21 municipalities. The selected Random Forest flagged 66 of 99 detections and 10 of 98 non-detects. Its balanced accuracy was 0.782. A rule flagging every surface-water sample reached 0.777. Weather did not consistently improve results. Source-specific performance and the detection misses are reported in the notebook.
+
+## Sources
+
+- [French Ministry of Health SISE-Eaux surveillance](https://www.data.gouv.fr/datasets/resultats-du-controle-sanitaire-de-leau-du-robinet)
+- [Météo-France daily measurements](https://www.data.gouv.fr/datasets/donnees-climatologiques-de-base-quotidiennes)
+- [French government API Géo](https://www.data.gouv.fr/dataservices/api-decoupage-administratif-api-geo)
+- [WHO Table 7.10](https://cdn.who.int/media/docs/default-source/wash-documents/water-safety-and-quality/dwq-guidelines-4/gdwq_4ed_with_third-addenda_microbial-aspects.pdf)
+- [TS 266, April 2005](https://sandoramuhendislik.com/TS_266.pdf)

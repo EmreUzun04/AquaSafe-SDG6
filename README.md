@@ -8,7 +8,6 @@ AquaSafe studies whether three water measurements and preceding weather can help
 | --- | --- |
 | AquaSafe.ipynb | Executed notebook with data preparation, weather matching, exploratory analysis, model evaluation and interpretation. |
 | data/sise_eaux_capture_observations.csv | Original French Ministry of Health SISE-Eaux measurements and sampling metadata for the study scope. Measurement identifiers and official archive URLs are included. |
-| surname1_surname2_assignment2.pdf | One-page model results report. |
 
 ## Run the notebook
 
@@ -28,7 +27,7 @@ To extend the dataset, join the official **CAP_RES** and **CAP_PLV** extracts by
 - The cohort has **989 samples**, including **497 E. coli detections** and **492 non-detects**. All three sensor variables are complete. pH is generally a field reading. Most conductivity and all turbidity measurements are laboratory readings. Turbidity is reported in NFU and conductivity in µS/cm at 25 °C. Source water is untreated groundwater or surface water intended for supply. The complete-case filter and laboratory rules are recorded in the notebook.
 - WHO Table 7.10 specifies no detectable E. coli in 100 mL. TS 266 April 2005 Table 1 specifies 0 per 100 mL for Class 2 Type 2. The pH indicator uses the strict 6.5–9.5 interval in TS 266 Table 3. Reported turbidity and conductivity remain in their original NFU and 25 °C measurement definitions.
 - Capture coordinates are withheld in the source archive. Official municipality reference centers provide the location approximation for Météo-France matching. All 989 complete events have eligible weather. Weather station IDs, source URLs, quality flags and aligned values are retained in the generated output.
-- The test holds out 197 samples from 21 municipalities. The selected Random Forest flagged 66 of 99 detections and 10 of 98 non-detects. Its balanced accuracy was 0.782. A rule flagging every surface-water sample reached 0.777. Weather did not consistently improve results. Source-specific performance and the detection misses are reported in the notebook.
+- Evaluation holds out entire municipalities. The notebook reports overall and source-specific performance for models trained with and without weather features.
 
 ## Sources
 
